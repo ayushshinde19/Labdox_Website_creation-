@@ -1,0 +1,2865 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Labdox - HELPING LEARNERS ACQUIRE SKILLS THAT MATTER</title>
+
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide Icons via CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Custom CSS -->
+    <style>
+      /* Custom styles for carousel navigation and scroll snapping */
+      .carousel-container {
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth; /* Ensure smooth scrolling for buttons */
+      }
+      .carousel-item {
+        scroll-snap-align: start;
+        flex: 0 0 auto; /* Prevent items from shrinking */
+        width: 100%; /* Default to full width on small screens */
+      }
+
+      /* Responsive adjustments for carousel items */
+      @media (min-width: 768px) {
+        .carousel-item {
+          width: calc(
+            50% - 0.75rem
+          ); /* Two items per row on medium screens with 1.5rem gap (approx 24px) */
+        }
+      }
+      @media (min-width: 1024px) {
+        .carousel-item {
+          width: calc(
+            33.333% - 1rem
+          ); /* Three items per row on large screens with 1.5rem gap (approx 24px) */
+        }
+      }
+      /* Ensure Lucide icons are rendered */
+      .lucide {
+        display: inline-block;
+      }
+      /* Responsive embed for videos */
+      .video-responsive {
+        position: relative;
+        padding-bottom: 56.25%; /* 16:9 aspect ratio */
+        height: 0;
+        overflow: hidden;
+        max-width: 100%;
+        background: #000;
+        border-radius: 1.5rem; /* rounded-3xl */
+      }
+      .video-responsive iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+
+      /* Scrollbar Hide for carousel */
+      .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+      }
+      .scrollbar-hide {
+          -ms-overflow-style: none;  /* IE and Edge */
+      }
+
+      /* Custom Modal Styles */
+      .custom-modal {
+          display: none; /* Hidden by default */
+          position: fixed; /* Stay in place */
+          z-index: 1000; /* Sit on top */
+          left: 0;
+          top: 0;
+          width: 100%; /* Full width */
+          height: 100%; /* Full height */
+          overflow: auto; /* Enable scroll if needed */
+          background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+          justify-content: center;
+          align-items: center;
+      }
+
+      .custom-modal-content {
+          background-color: #1a1a1a; /* Darker background for modal */
+          margin: auto;
+          padding: 20px;
+          border: 1px solid #333;
+          width: 90%;
+          max-width: 400px;
+          border-radius: 10px;
+          box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+          animation-name: animatetop;
+          animation-duration: 0.4s;
+          color: white;
+      }
+
+      @keyframes animatetop {
+          from {top: -300px; opacity: 0}
+          to {top: 0; opacity: 1}
+      }
+
+      .custom-modal-header {
+          padding: 10px 16px;
+          background: linear-gradient(90deg, #8b5cf6, #ec4899); /* Primary gradient */
+          color: white;
+          border-top-left-radius: 10px;
+          border-top-right-radius: 10px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+      }
+
+      .custom-modal-body {
+          padding: 20px 16px;
+      }
+
+      .custom-modal-footer {
+          padding: 10px 16px;
+          text-align: right;
+          border-top: 1px solid #333;
+          border-bottom-left-radius: 10px;
+          border-bottom-right-radius: 10px;
+      }
+
+      .custom-close-button {
+          color: #aaa;
+          font-size: 28px;
+          font-weight: bold;
+          cursor: pointer;
+          transition: color 0.3s ease;
+      }
+
+      .custom-close-button:hover,
+      .custom-close-button:focus {
+          color: white;
+          text-decoration: none;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-black text-white overflow-x-hidden font-inter">
+    <!-- =========== Navigation =========== -->
+    <nav
+      id="navigation"
+      class="fixed top-0 w-full z-50 transition-all duration-300 bg-transparent"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center py-4">
+          <a href="#" class="flex items-center space-x-2" title="Labdox Home">
+            <!-- Logo Section: Fixed alignment and increased size -->
+            <span
+              class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent"
+            >
+              Labdox
+            </span>
+          </a>
+
+          <!-- Desktop Navigation -->
+          <div class="hidden md:flex items-center space-x-8">
+            <a
+              href="#about"
+              class="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors duration-300 group"
+            >
+              <i
+                data-lucide="code"
+                class="w-4 h-4 group-hover:animate-bounce"
+              ></i>
+              <span class="relative">
+                About
+                <span
+                  class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-pink-400 transition-all duration-300 group-hover:w-full"
+                ></span>
+              </span>
+            </a>
+            <a
+              href="#offerings"
+              class="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors duration-300 group"
+            >
+              <i
+                data-lucide="book-open"
+                class="w-4 h-4 group-hover:animate-bounce"
+              ></i>
+              <span class="relative">
+                Courses
+                <span
+                  class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-pink-400 transition-all duration-300 group-hover:w-full"
+                ></span>
+              </span>
+            </a>
+            <a
+              href="#audiences"
+              class="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors duration-300 group"
+            >
+              <i
+                data-lucide="users"
+                class="w-4 h-4 group-hover:animate-bounce"
+              ></i>
+              <span class="relative">
+                Community
+                <span
+                  class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-pink-400 transition-all duration-300 group-hover:w-full"
+                ></span>
+              </span>
+            </a>
+            <a
+              href="#contact"
+              class="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors duration-300 group"
+            >
+              <i
+                data-lucide="mail"
+                class="w-4 h-4 group-hover:animate-bounce"
+              ></i>
+              <span class="relative">
+                Contact
+                <span
+                  class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-pink-400 transition-all duration-300 group-hover:w-full"
+                ></span>
+              </span>
+            </a>
+          </div>
+
+          <!-- Mobile menu button -->
+          <div class="md:hidden">
+            <button
+              id="mobile-menu-button"
+              type="button"
+              class="text-gray-300 hover:text-white transition-colors duration-300"
+              aria-label="Open mobile menu"
+              title="Open mobile menu"
+            >
+              <i data-lucide="menu" id="menu-icon-open" class="w-6 h-6"></i>
+              <i
+                data-lucide="x"
+                id="menu-icon-close"
+                class="w-6 h-6 hidden"
+              ></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div
+          id="mobile-menu"
+          class="hidden md:hidden bg-black/90 backdrop-blur-lg rounded-lg mt-2 p-4 animate-fade-in"
+        >
+          <a
+            href="#about"
+            class="mobile-nav-link flex items-center space-x-3 py-3 text-gray-300 hover:text-white transition-colors duration-300"
+          >
+            <i data-lucide="code" class="w-5 h-5"></i>
+            <span>About</span>
+          </a>
+          <a
+            href="#offerings"
+            class="mobile-nav-link flex items-center space-x-3 py-3 text-gray-300 hover:text-white transition-colors duration-300"
+          >
+            <i data-lucide="book-open" class="w-5 h-5"></i>
+            <span>Courses</span>
+          </a>
+          <a
+            href="#audiences"
+            class="mobile-nav-link flex items-center space-x-3 py-3 text-gray-300 hover:text-white transition-colors duration-300"
+          >
+            <i data-lucide="users" class="w-5 h-5"></i>
+            <span>Community</span>
+          </a>
+          <a
+            href="#contact"
+            class="mobile-nav-link flex items-center space-x-3 py-3 text-gray-300 hover:text-white transition-colors duration-300"
+          >
+            <i data-lucide="mail" class="w-5 h-5"></i>
+            <span>Contact</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <!-- =========== Hero Section =========== -->
+      <section
+        id="hero"
+        class="relative min-h-screen flex items-center justify-center overflow-hidden py-16"
+      >
+        <!-- Animated background elements -->
+        <div class="absolute inset-0">
+          <div
+            class="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl animate-pulse"
+          ></div>
+          <div
+            class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl animate-pulse delay-1000"
+          ></div>
+          <div
+            class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-conic from-transparent via-purple-500/5 to-transparent rounded-full animate-spin"
+            style="animation-duration: 20s"
+          ></div>
+        </div>
+        <!-- Floating 3D elements -->
+        <div class="absolute inset-0 pointer-events-none">
+          <div
+            class="absolute top-20 left-20 transform animate-bounce"
+            style="animation-delay: 0s; animation-duration: 3s"
+          >
+            <div
+              class="w-8 h-8 bg-gradient-to-r from-purple-400 to-pink-400 rounded-lg transform rotate-45 opacity-80"
+            ></div>
+          </div>
+          <div
+            class="absolute top-40 right-32 transform animate-bounce"
+            style="animation-delay: 1s; animation-duration: 4s"
+          >
+            <i
+              data-lucide="code-2"
+              class="w-10 h-10 text-purple-400 opacity-60"
+            ></i>
+          </div>
+          <div
+            class="absolute bottom-32 left-32 transform animate-bounce"
+            style="animation-delay: 2s; animation-duration: 5s"
+          >
+            <i data-lucide="zap" class="w-12 h-12 text-pink-400 opacity-60"></i>
+          </div>
+        </div>
+        <div
+          class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
+        >
+          <div class="animate-fade-in">
+            <!-- Badge -->
+            <div
+              class="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-lg rounded-full px-4 py-2 mb-8 border border-purple-500/30"
+            >
+              <i
+                data-lucide="sparkles"
+                class="w-4 h-4 text-purple-400 animate-pulse"
+              ></i>
+              <span class="text-sm text-purple-300 font-medium"
+                >Welcome to the Future of Learning</span
+              >
+            </div>
+            <!-- Main heading -->
+            <h1
+              class="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent leading-tight"
+            >
+              “You’ve done everything they told you—and still feel stuck.”
+            </h1>
+            <!-- Subtitle -->
+            <p
+              class="text-xl md:text-2xl text-gray-300 mb-6 max-w-4xl mx-auto leading-relaxed"
+            >
+              At Labdox, we help students, professionals, and entrepreneurs
+              explore their passion and build careers that actually feel like
+              theirs.
+            </p>
+            <p
+              class="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed"
+            >
+              Not just skill-building—identity building.<br />Not just
+              placement—purpose.<br />Not just learning—transformation.
+            </p>
+            <!-- CTA Buttons -->
+            <div
+              class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 mb-16"
+            >
+              <a
+                href="#contact"
+                class="group bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-8 py-4 text-lg font-semibold rounded-full transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-purple-500/25"
+              >
+                👉 Start your journey today
+                <i
+                  data-lucide="arrow-right"
+                  class="inline-block ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
+                ></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- Scroll indicator -->
+        <div
+          class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce"
+        >
+          <div
+            class="w-6 h-10 border-2 border-purple-500/50 rounded-full flex justify-center"
+          >
+            <div
+              class="w-1 h-3 bg-gradient-to-b from-purple-400 to-pink-400 rounded-full mt-2 animate-pulse"
+            ></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========== About Us Section =========== -->
+      <section id="about" class="py-20 relative overflow-hidden">
+        <!-- Background elements -->
+        <div class="absolute inset-0">
+          <div
+            class="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl"
+          ></div>
+          <div
+            class="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-500/5 rounded-full blur-3xl"
+          ></div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <!-- Section Header -->
+          <div class="text-center mb-16">
+            <h2
+              class="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent"
+            >
+              About
+              <span
+                class="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent"
+                >Labdox</span
+              >
+            </h2>
+            <p class="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
+              Labdox is a platform to help learners acquire Engineering &
+              Entrepreneurial skills from core Engineering, Scientific Research
+              & Emerging Technologies sectors/industries. Through Labdox, we are
+              helping learners to be work-ready and acquire skills that are
+              needed to excel in their professional journey. We have also taken
+              a step further where we can prepare learners on the
+              entrepreneurial aspects of being enterprising. With our
+              specialized and customized training that covers numerous
+              engineering and technical disciplines, enables mastering new
+              skills and building a strong career.
+            </p>
+          </div>
+          <!-- Mission Statement -->
+          <div class="mb-20">
+            <div
+              class="bg-gradient-to-r from-purple-500/10 to-pink-500/10 backdrop-blur-lg rounded-3xl p-8 md:p-12 border border-purple-500/20 hover:border-purple-500/40 transition-all duration-500 transform hover:scale-[1.02]"
+            >
+              <div class="flex items-center mb-6">
+                <div
+                  class="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mr-4"
+                >
+                  <i data-lucide="target" class="w-6 h-6 text-white"></i>
+                </div>
+                <h3 class="text-2xl md:text-3xl font-bold text-white">
+                  Our Mission
+                </h3>
+              </div>
+              <p class="text-lg text-gray-300 leading-relaxed">
+                To democratize technology education by providing world-class,
+                accessible learning experiences that prepare students for the
+                demands of tomorrow's digital landscape. We believe in hands-on
+                learning, community collaboration, and fostering innovation at
+                every step of the journey.
+              </p>
+            </div>
+          </div>
+          <!-- Stats Grid -->
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20"
+          >
+            <!-- Stat 1 -->
+            <div class="group">
+              <div
+                class="bg-black/40 backdrop-blur-lg rounded-2xl p-6 border border-gray-800 hover:border-purple-500/40 transition-all duration-300 transform hover:scale-105 hover:-translate-y-2"
+              >
+                <div
+                  class="w-12 h-12 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full flex items-center justify-center mb-4 group-hover:animate-pulse"
+                >
+                  <i data-lucide="users" class="w-6 h-6 text-white"></i>
+                </div>
+                <div
+                  class="text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-2"
+                >
+                  <span class="count-up" data-target="25000">0</span>+
+                </div>
+                <div
+                  class="text-gray-400 group-hover:text-gray-300 transition-colors duration-300"
+                >
+                  Active Learners
+                </div>
+              </div>
+            </div>
+            <!-- Stat 2 -->
+            <div class="group">
+              <div
+                class="bg-black/40 backdrop-blur-lg rounded-2xl p-6 border border-gray-800 hover:border-purple-500/40 transition-all duration-300 transform hover:scale-105 hover:-translate-y-2"
+              >
+                <div
+                  class="w-12 h-12 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full flex items-center justify-center mb-4 group-hover:animate-pulse"
+                >
+                  <i data-lucide="award" class="w-6 h-6 text-white"></i>
+                </div>
+                <div
+                  class="text-3xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent mb-2"
+                >
+                  <span class="count-up" data-target="95">0</span>%
+                </div>
+                <div
+                  class="text-gray-400 group-hover:text-gray-300 transition-colors duration-300"
+                >
+                  Success Rate
+                </div>
+              </div>
+            </div>
+            <!-- Stat 3 -->
+            <div class="group">
+              <div
+                class="bg-black/40 backdrop-blur-lg rounded-2xl p-6 border border-gray-800 hover:border-purple-500/40 transition-all duration-300 transform hover:scale-105 hover:-translate-y-2"
+              >
+                <div
+                  class="w-12 h-12 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center mb-4 group-hover:animate-pulse"
+                >
+                  <i data-lucide="globe" class="w-6 h-6 text-white"></i>
+                </div>
+                <div
+                  class="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2"
+                >
+                  <span class="count-up" data-target="90">0</span>+
+                </div>
+                <div
+                  class="text-gray-400 group-hover:text-gray-300 transition-colors duration-300"
+                >
+                  Countries Reached
+                </div>
+              </div>
+            </div>
+            <!-- Stat 4 -->
+            <div class="group">
+              <div
+                class="bg-black/40 backdrop-blur-lg rounded-2xl p-6 border border-gray-800 hover:border-purple-500/40 transition-all duration-300 transform hover:scale-105 hover:-translate-y-2"
+              >
+                <div
+                  class="w-12 h-12 bg-gradient-to-r from-orange-400 to-red-400 rounded-full flex items-center justify-center mb-4 group-hover:animate-pulse"
+                >
+                  <i data-lucide="book-open" class="w-6 h-6 text-white"></i>
+                </div>
+                <div
+                  class="text-3xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent mb-2"
+                >
+                  <span class="count-up" data-target="200">0</span>+
+                </div>
+                <div
+                  class="text-gray-400 group-hover:text-gray-300 transition-colors duration-300"
+                >
+                  Courses Available
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Specialties -->
+          <div class="mt-20">
+            <div class="text-center mb-16">
+              <h2
+                class="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent"
+              >
+                What we
+                <span
+                  class="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent"
+                  >Offer</span
+                >
+              </h2>
+              <p
+                class="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed"
+              >
+                Comprehensive courses designed to take you from beginner to
+                industry-ready professional
+              </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <!-- Specialty 1 -->
+              <div class="group">
+                <div
+                  class="bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-lg rounded-2xl p-8 border border-gray-800 hover:border-purple-500/40 transition-all duration-500 transform hover:scale-105 hover:-translate-y-4 h-full"
+                >
+                  <div
+                    class="w-16 h-16 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center mb-6 group-hover:animate-bounce"
+                  >
+                    <i data-lucide="lightbulb" class="w-8 h-8 text-white"></i>
+                  </div>
+                  <h4
+                    class="text-xl font-bold text-white mb-4 group-hover:text-purple-300 transition-colors duration-300"
+                  >
+                    Expert Teachers
+                  </h4>
+                  <p
+                    class="text-gray-400 group-hover:text-gray-300 transition-colors duration-300"
+                  >
+                    Our experienced teachers make every content interesting and
+                    exciting so that young learners are self-motivated and eager
+                    to develop enduring relationships with their tutors.
+                  </p>
+                </div>
+              </div>
+              <!-- Specialty 2 -->
+              <div class="group">
+                <div
+                  class="bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-lg rounded-2xl p-8 border border-gray-800 hover:border-purple-500/40 transition-all duration-500 transform hover:scale-105 hover:-translate-y-4 h-full"
+                >
+                  <div
+                    class="w-16 h-16 bg-gradient-to-r from-green-400 to-blue-500 rounded-2xl flex items-center justify-center mb-6 group-hover:animate-bounce"
+                  >
+                    <i data-lucide="target" class="w-8 h-8 text-white"></i>
+                  </div>
+                  <h4
+                    class="text-xl font-bold text-white mb-4 group-hover:text-purple-300 transition-colors duration-300"
+                  >
+                    Interactive Sessions
+                  </h4>
+                  <p
+                    class="text-gray-400 group-hover:text-gray-300 transition-colors duration-300"
+                  >
+                    Our tutors are skilled academicians who are trained in the
+                    online mode. Their sessions are interactive and benchmarked
+                    to global best practices.
+                  </p>
+                </div>
+              </div>
+              <!-- Specialty 3 -->
+              <div class="group">
+                <div
+                  class="bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-lg rounded-2xl p-8 border border-gray-800 hover:border-purple-500/40 transition-all duration-500 transform hover:scale-105 hover:-translate-y-4 h-full"
+                >
+                  <div
+                    class="w-16 h-16 bg-gradient-to-r from-purple-400 to-pink-500 rounded-2xl flex items-center justify-center mb-6 group-hover:animate-bounce"
+                  >
+                    <i data-lucide="home" class="w-8 h-8 text-white"></i>
+                  </div>
+                  <h4
+                    class="text-xl font-bold text-white mb-4 group-hover:text-purple-300 transition-colors duration-300"
+                  >
+                    Learn From Home
+                  </h4>
+                  <p
+                    class="text-gray-400 group-hover:text-gray-300 transition-colors duration-300"
+                  >
+                    Our creative teaching and learning platform is designed to
+                    make remote learning convenient, productive and safe so that
+                    even the most vulnerable learner is able to make measurable
+                    progress in attainment.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========== YouTube Video Section =========== -->
+      <section id="youtube-video" class="py-20 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div class="text-center mb-16">
+            <h2
+              class="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent"
+            >
+              Watch Our
+              <span
+                class="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent"
+                >Story</span
+              >
+            </h2>
+            <p class="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
+              Get a glimpse into the Labdox experience and what we offer.
+            </p>
+          </div>
+          <div class="video-responsive">
+            <iframe
+              src="https://www.youtube.com/embed/7LHd95MTS7A?rel=0"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========== Offerings Section =========== -->
+      <section id="offerings" class="py-20 relative overflow-hidden">
+        <!-- Background elements -->
+        <div class="absolute inset-0">
+          <div
+            class="absolute top-1/4 right-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"
+          ></div>
+          <div
+            class="absolute bottom-1/4 left-0 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl"
+          ></div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <!-- Course Categories -->
+          <div class="mb-16">
+            <h3
+              class="text-2xl md:text-3xl font-bold text-center mb-8 text-white"
+            >
+              Course Categories
+            </h3>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              <!-- Category 1 -->
+              <div class="group">
+                <div
+                  class="bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-lg rounded-2xl p-4 border border-gray-800 transition-all duration-300 text-center"
+                >
+                  <h4 class="text-sm font-medium text-gray-300">
+                    Web Development
+                  </h4>
+                </div>
+              </div>
+              <!-- Category 2 -->
+              <div class="group">
+                <div
+                  class="bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-lg rounded-2xl p-4 border border-gray-800 transition-all duration-300 text-center"
+                >
+                  <h4 class="text-sm font-medium text-gray-300">DevOps</h4>
+                </div>
+              </div>
+              <!-- Category 3 -->
+              <div class="group">
+                <div
+                  class="bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-lg rounded-2xl p-4 border border-gray-800 transition-all duration-300 text-center"
+                >
+                  <h4 class="text-sm font-medium text-gray-300">
+                    Programming
+                  </h4>
+                </div>
+              </div>
+              <!-- Category 4 -->
+              <div class="group">
+                <div
+                  class="bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-lg rounded-2xl p-4 border border-gray-800 transition-all duration-300 text-center"
+                >
+                  <h4 class="text-sm font-medium text-gray-300">AI & ML</h4>
+                </div>
+              </div>
+              <!-- Category 5 -->
+              <div class="group">
+                <div
+                  class="bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-lg rounded-2xl p-4 border border-gray-800 transition-all duration-300 text-center"
+                >
+                  <h4 class="text-sm font-medium text-gray-300">
+                    Cloud Computing
+                  </h4>
+                </div>
+              </div>
+              <!-- Category 6 -->
+              <div class="group">
+                <div
+                  class="bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-lg rounded-2xl p-4 border border-gray-800 transition-all duration-300 text-center"
+                >
+                  <h4 class="text-sm font-medium text-gray-300">UI/UX</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Popular Courses Section - Converted to Carousel -->
+          <div>
+            <h3
+              class="text-2xl md:text-3xl font-bold text-center mb-12 text-white"
+            >
+              Popular Courses
+            </h3>
+            <div class="relative">
+              <div
+                id="courses-carousel"
+                class="carousel-container flex overflow-x-scroll scrollbar-hide space-x-6 pb-4 px-2"
+              >
+                <!-- Courses will be dynamically injected here by JavaScript -->
+              </div>
+              <!-- Carousel Navigation Buttons -->
+              <button
+                id="carousel-prev"
+                class="absolute left-0 top-1/2 -translate-y-1/2 bg-gray-800/70 hover:bg-gray-700/90 p-3 rounded-full shadow-lg z-20 transition-all duration-300 transform hover:scale-110"
+                aria-label="Previous Course"
+              >
+                <i data-lucide="chevron-left" class="w-6 h-6 text-white"></i>
+              </button>
+              <button
+                id="carousel-next"
+                class="absolute right-0 top-1/2 -translate-y-1/2 bg-gray-800/70 hover:bg-gray-700/90 p-3 rounded-full shadow-lg z-20 transition-all duration-300 transform hover:scale-110"
+                aria-label="Next Course"
+              >
+                <i data-lucide="chevron-right" class="w-6 h-6 text-white"></i>
+              </button>
+            </div>
+          </div>
+          <!-- View All Courses CTA -->
+         <div class="text-center mt-12">
+            <a href="https://academy.labdox.com/Courses-page" target="_blank" rel="noopener noreferrer">
+                <button
+                class="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white px-8 py-4 text-lg font-semibold rounded-full transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-blue-500/25"
+                >
+                View All Courses
+                </button>
+            </a>
+        </div>
+        </div>
+      </section>
+
+      <!-- =========== Why Choose Us Section =========== -->
+      <section id="why-choose" class="py-20 relative overflow-hidden">
+        <!-- Background elements -->
+        <div class="absolute inset-0">
+          <div
+            class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-purple-500/5 via-transparent to-pink-500/5"
+          ></div>
+          <div
+            class="absolute top-1/3 right-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse"
+          ></div>
+          <div
+            class="absolute bottom-1/3 left-1/4 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"
+          ></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <!-- Section Header -->
+          <div class="text-center mb-16">
+            <h2
+              class="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent"
+            >
+              Why Choose
+              <span
+                class="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent"
+                >Labdox</span
+              >
+            </h2>
+            <p class="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
+              Discover what makes us the preferred choice for thousands of
+              aspiring tech professionals worldwide
+            </p>
+          </div>
+          <!-- Value Propositions Grid -->
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20"
+          >
+            <!-- Prop 1 -->
+            <div class="group">
+              <div
+                class="bg-gradient-to-br from-gray-900/60 to-black/60 backdrop-blur-lg rounded-3xl p-8 border border-gray-800 hover:border-purple-500/40 transition-all duration-500 transform hover:scale-105 hover:-translate-y-4 h-full"
+              >
+                <div
+                  class="w-16 h-16 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center mb-6 group-hover:animate-bounce"
+                >
+                  <i data-lucide="zap" class="w-8 h-8 text-white"></i>
+                </div>
+                <h3
+                  class="text-xl font-bold text-white mb-4 group-hover:text-purple-300 transition-colors duration-300"
+                >
+                  Expert Tutors
+                </h3>
+                <p
+                  class="text-gray-400 mb-6 group-hover:text-gray-300 transition-colors duration-300"
+                >
+                  Remarkable efficiency. Years of experience.
+                </p>
+                <ul class="space-y-2">
+                  <li
+                    class="flex items-center text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                  >
+                    <i
+                      data-lucide="check-circle"
+                      class="w-4 h-4 mr-2 text-green-400"
+                    ></i
+                    >Interactive coding labs
+                  </li>
+                  <li
+                    class="flex items-center text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                  >
+                    <i
+                      data-lucide="check-circle"
+                      class="w-4 h-4 mr-2 text-green-400"
+                    ></i
+                    >Real-time feedback
+                  </li>
+                  <li
+                    class="flex items-center text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                  >
+                    <i
+                      data-lucide="check-circle"
+                      class="w-4 h-4 mr-2 text-green-400"
+                    ></i
+                    >Adaptive learning paths
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- Prop 2 -->
+            <div class="group">
+              <div
+                class="bg-gradient-to-br from-gray-900/60 to-black/60 backdrop-blur-lg rounded-3xl p-8 border border-gray-800 hover:border-purple-500/40 transition-all duration-500 transform hover:scale-105 hover:-translate-y-4 h-full"
+              >
+                <div
+                  class="w-16 h-16 bg-gradient-to-r from-purple-400 to-pink-500 rounded-2xl flex items-center justify-center mb-6 group-hover:animate-bounce"
+                >
+                  <i data-lucide="trophy" class="w-8 h-8 text-white"></i>
+                </div>
+                <h3
+                  class="text-xl font-bold text-white mb-4 group-hover:text-purple-300 transition-colors duration-300"
+                >
+                  Learning Design
+                </h3>
+                <p
+                  class="text-gray-400 mb-6 group-hover:text-gray-300 transition-colors duration-300"
+                >
+                  Our one to one tutoring program provides finest
+                </p>
+                <ul class="space-y-2">
+                  <li
+                    class="flex items-center text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                  >
+                    <i
+                      data-lucide="check-circle"
+                      class="w-4 h-4 mr-2 text-green-400"
+                    ></i
+                    >Industry partnerships
+                  </li>
+                  <li
+                    class="flex items-center text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                  >
+                    <i
+                      data-lucide="check-circle"
+                      class="w-4 h-4 mr-2 text-green-400"
+                    ></i
+                    >Employer recognition
+                  </li>
+                  <li
+                    class="flex items-center text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                  >
+                    <i
+                      data-lucide="check-circle"
+                      class="w-4 h-4 mr-2 text-green-400"
+                    ></i
+                    >Career placement support
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- Prop 3 -->
+            <div class="group">
+              <div
+                class="bg-gradient-to-br from-gray-900/60 to-black/60 backdrop-blur-lg rounded-3xl p-8 border border-gray-800 hover:border-purple-500/40 transition-all duration-500 transform hover:scale-105 hover:-translate-y-4 h-full"
+              >
+                <div
+                  class="w-16 h-16 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-2xl flex items-center justify-center mb-6 group-hover:animate-bounce"
+                >
+                  <i data-lucide="laptop" class="w-8 h-8 text-white"></i>
+                </div>
+                <h3
+                  class="text-xl font-bold text-white mb-4 group-hover:text-purple-300 transition-colors duration-300"
+                >
+                  New Technology
+                </h3>
+                <p
+                  class="text-gray-400 mb-6 group-hover:text-gray-300 transition-colors duration-300"
+                >
+                  We have been successfully blending human expertise.
+                </p>
+                <ul class="space-y-2">
+                  <li
+                    class="flex items-center text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                  >
+                    <i
+                      data-lucide="check-circle"
+                      class="w-4 h-4 mr-2 text-green-400"
+                    ></i
+                    >Latest tech stack
+                  </li>
+                  <li
+                    class="flex items-center text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                  >
+                    <i
+                      data-lucide="check-circle"
+                      class="w-4 h-4 mr-2 text-green-400"
+                    ></i
+                    >Cloud-based labs
+                  </li>
+                  <li
+                    class="flex items-center text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                  >
+                    <i
+                      data-lucide="check-circle"
+                      class="w-4 h-4 mr-2 text-green-400"
+                    ></i
+                    >Modern development tools
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- Prop 4 -->
+            <div class="group">
+              <div
+                class="bg-gradient-to-br from-gray-900/60 to-black/60 backdrop-blur-lg rounded-3xl p-8 border border-gray-800 hover:border-purple-500/40 transition-all duration-500 transform hover:scale-105 hover:-translate-y-4 h-full"
+              >
+                <div
+                  class="w-16 h-16 bg-gradient-to-r from-green-400 to-emerald-500 rounded-2xl flex items-center justify-center mb-6 group-hover:animate-bounce"
+                >
+                  <i data-lucide="rocket" class="w-8 h-8 text-white"></i>
+                </div>
+                <h3
+                  class="text-xl font-bold text-white mb-4 group-hover:text-purple-300 transition-colors duration-300"
+                >
+                  Result Oriented
+                </h3>
+                <p
+                  class="text-gray-400 mb-6 group-hover:text-gray-300 transition-colors duration-300"
+                >
+                  A student's potential is fully explored to help him/her secure
+                </p>
+                <ul class="space-y-2">
+                  <li
+                    class="flex items-center text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                  >
+                    <i
+                      data-lucide="check-circle"
+                      class="w-4 h-4 mr-2 text-green-400"
+                    ></i
+                    >Latest tech stack
+                  </li>
+                  <li
+                    class="flex items-center text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                  >
+                    <i
+                      data-lucide="check-circle"
+                      class="w-4 h-4 mr-2 text-green-400"
+                    ></i
+                    >Cloud-based labs
+                  </li>
+                  <li
+                    class="flex items-center text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                  >
+                    <i
+                      data-lucide="check-circle"
+                      class="w-4 h-4 mr-2 text-green-400"
+                    ></i
+                    >Modern development tools
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- Prop 5 -->
+            <div class="group">
+              <div
+                class="bg-gradient-to-br from-gray-900/60 to-black/60 backdrop-blur-lg rounded-3xl p-8 border border-gray-800 hover:border-purple-500/40 transition-all duration-500 transform hover:scale-105 hover:-translate-y-4 h-full"
+              >
+                <div
+                  class="w-16 h-16 bg-gradient-to-r from-red-400 to-pink-500 rounded-2xl flex items-center justify-center mb-6 group-hover:animate-bounce"
+                >
+                  <i data-lucide="heart" class="w-8 h-8 text-white"></i>
+                </div>
+                <h3
+                  class="text-xl font-bold text-white mb-4 group-hover:text-purple-300 transition-colors duration-300"
+                >
+                  Passionate Community
+                </h3>
+                <p
+                  class="text-gray-400 mb-6 group-hover:text-gray-300 transition-colors duration-300"
+                >
+                  Join a vibrant community of learners, creators, and innovators
+                </p>
+                <ul class="space-y-2">
+                  <li
+                    class="flex items-center text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                  >
+                    <i
+                      data-lucide="check-circle"
+                      class="w-4 h-4 mr-2 text-green-400"
+                    ></i
+                    >Global network
+                  </li>
+                  <li
+                    class="flex items-center text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                  >
+                    <i
+                      data-lucide="check-circle"
+                      class="w-4 h-4 mr-2 text-green-400"
+                    ></i
+                    >Peer collaboration
+                  </li>
+                  <li
+                    class="flex items-center text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                  >
+                    <i
+                      data-lucide="check-circle"
+                      class="w-4 h-4 mr-2 text-green-400"
+                    ></i
+                    >Alumni connections
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- Prop 6 -->
+            <div class="group">
+              <div
+                class="bg-gradient-to-br from-gray-900/60 to-black/60 backdrop-blur-lg rounded-3xl p-8 border border-gray-800 hover:border-purple-500/40 transition-all duration-500 transform hover:scale-105 hover:-translate-y-4 h-full"
+              >
+                <div
+                  class="w-16 h-16 bg-gradient-to-r from-indigo-400 to-purple-500 rounded-2xl flex items-center justify-center mb-6 group-hover:animate-bounce"
+                >
+                  <i data-lucide="shield" class="w-8 h-8 text-white"></i>
+                </div>
+                <h3
+                  class="text-xl font-bold text-white mb-4 group-hover:text-purple-300 transition-colors duration-300"
+                >
+                  Success Guarantee
+                </h3>
+                <p
+                  class="text-gray-400 mb-6 group-hover:text-gray-300 transition-colors duration-300"
+                >
+                  We stand behind our courses with job placement assistance and
+                  support
+                </p>
+                <ul class="space-y-2">
+                  <li
+                    class="flex items-center text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                  >
+                    <i
+                      data-lucide="check-circle"
+                      class="w-4 h-4 mr-2 text-green-400"
+                    ></i
+                    >Job placement support
+                  </li>
+                  <li
+                    class="flex items-center text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                  >
+                    <i
+                      data-lucide="check-circle"
+                      class="w-4 h-4 mr-2 text-green-400"
+                    ></i
+                    >Money-back guarantee
+                  </li>
+                  <li
+                    class="flex items-center text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                  >
+                    <i
+                      data-lucide="check-circle"
+                      class="w-4 h-4 mr-2 text-green-400"
+                    ></i
+                    >Lifetime access
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========== New Testimonial Section (with Carousel) =========== -->
+      <section id="testimonials" class="py-20 relative overflow-hidden">
+        <div class="absolute inset-0">
+          <div
+            class="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl animate-pulse"
+          ></div>
+          <div
+            class="absolute bottom-1/4 right-1/4 w-64 h-64 bg-pink-500/10 rounded-full blur-3xl animate-pulse delay-1000"
+          ></div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div class="text-center mb-16">
+            <h2
+              class="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent"
+            >
+              What Our
+              <span
+                class="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent"
+                >Learners Say</span
+              >
+            </h2>
+            <p class="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
+              Hear directly from those who transformed their careers with Labdox.
+            </p>
+          </div>
+
+          <div class="relative">
+            <div
+              id="testimonials-carousel"
+              class="carousel-container flex overflow-x-scroll scrollbar-hide space-x-6 pb-4 px-2"
+            >
+              <!-- Testimonials will be dynamically injected here by JavaScript -->
+            </div>
+            <!-- Carousel Navigation Buttons -->
+            <button
+              id="testimonials-carousel-prev"
+              class="absolute left-0 top-1/2 -translate-y-1/2 bg-gray-800/70 hover:bg-gray-700/90 p-3 rounded-full shadow-lg z-20 transition-all duration-300 transform hover:scale-110"
+              aria-label="Previous Testimonial"
+            >
+              <i data-lucide="chevron-left" class="w-6 h-6 text-white"></i>
+            </button>
+            <button
+              id="testimonials-carousel-next"
+              class="absolute right-0 top-1/2 -translate-y-1/2 bg-gray-800/70 hover:bg-gray-700/90 p-3 rounded-full shadow-lg z-20 transition-all duration-300 transform hover:scale-110"
+              aria-label="Next Testimonial"
+            >
+              <i data-lucide="chevron-right" class="w-6 h-6 text-white"></i>
+            </button>
+          </div>
+
+          <!-- Google Review Image -->
+          <div class="mt-20 text-center">
+            <h3 class="text-2xl font-bold text-white mb-8">
+              Rated Excellent on Google!
+            </h3>
+            <img
+              src="https://media.swipepages.com/2025/4/60b08f41c06b2b00106e0a72/feedback-scale--satisfaction-rating-design--instagram-post--300.png"
+              alt="Google Review Satisfaction Rating"
+              class="mx-auto rounded-xl shadow-lg border border-gray-800 p-4 max-w-xs md:max-w-sm lg:max-w-md"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- =========== Audiences Section =========== -->
+      <section id="audiences" class="py-20 relative overflow-hidden">
+        <!-- Background elements -->
+        <div class="absolute inset-0">
+          <div
+            class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-500/5 to-purple-500/5 rounded-full blur-3xl"
+          ></div>
+          <div
+            class="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-pink-500/5 to-orange-500/5 rounded-full blur-3xl"
+          ></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <!-- Section Header -->
+          <div class="text-center mb-16">
+            <h2
+              class="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent"
+            >
+              Who We
+              <span
+                class="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent"
+                >Serve</span
+              >
+            </h2>
+            <p class="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
+              Our comprehensive programs are designed to meet the unique needs
+              of diverse learners at every stage of their tech journey
+            </p>
+          </div>
+          <!-- Audiences Grid -->
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20"
+          >
+            <!-- Audience 1: Students & Graduates -->
+            <div class="group">
+              <div
+                class="bg-gradient-to-br from-gray-900/60 to-black/60 backdrop-blur-lg rounded-3xl overflow-hidden border border-gray-800 hover:border-purple-500/40 transition-all duration-500 transform hover:scale-105 hover:-translate-y-4 h-full flex flex-col"
+              >
+                <div
+                  class="h-24 bg-gradient-to-r from-blue-400 to-cyan-500 flex items-center justify-center text-4xl relative overflow-hidden"
+                >
+                  <div
+                    class="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent"
+                  ></div>
+                  <span class="relative z-10">🎓</span>
+                </div>
+                <div class="p-8 flex-grow">
+                  <div class="flex items-center mb-4">
+                    <div
+                      class="w-12 h-12 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-xl flex items-center justify-center mr-4 group-hover:animate-pulse"
+                    >
+                      <i
+                        data-lucide="graduation-cap"
+                        class="w-6 h-6 text-white"
+                      ></i>
+                    </div>
+                    <h3
+                      class="text-xl font-bold text-white group-hover:text-purple-300 transition-colors duration-300"
+                    >
+                      Students & Graduates
+                    </h3>
+                  </div>
+                  <p
+                    class="text-gray-400 mb-6 group-hover:text-gray-300 transition-colors duration-300"
+                  >
+                    Bridge the gap between academic knowledge and industry
+                    requirements
+                  </p>
+                  <div class="space-y-3">
+                    <div class="flex items-start">
+                      <div
+                        class="w-2 h-2 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-full mt-2 mr-3 flex-shrink-0"
+                      ></div>
+                      <span
+                        class="text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                        >Career-focused curriculum</span
+                      >
+                    </div>
+                    <div class="flex items-start">
+                      <div
+                        class="w-2 h-2 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-full mt-2 mr-3 flex-shrink-0"
+                      ></div>
+                      <span
+                        class="text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                        >Industry project experience</span
+                      >
+                    </div>
+                    <div class="flex items-start">
+                      <div
+                        class="w-2 h-2 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-full mt-2 mr-3 flex-shrink-0"
+                      ></div>
+                      <span
+                        class="text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                        >Job placement assistance</span
+                      >
+                    </div>
+                    <div class="flex items-start">
+                      <div
+                        class="w-2 h-2 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-full mt-2 mr-3 flex-shrink-0"
+                      ></div>
+                      <span
+                        class="text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                        >Professional portfolio development</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Audience 2: Working Professionals -->
+            <div class="group">
+              <div
+                class="bg-gradient-to-br from-gray-900/60 to-black/60 backdrop-blur-lg rounded-3xl overflow-hidden border border-gray-800 hover:border-purple-500/40 transition-all duration-500 transform hover:scale-105 hover:-translate-y-4 h-full flex flex-col"
+              >
+                <div
+                  class="h-24 bg-gradient-to-r from-purple-400 to-pink-500 flex items-center justify-center text-4xl relative overflow-hidden"
+                >
+                  <div
+                    class="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent"
+                  ></div>
+                  <span class="relative z-10">👔</span>
+                </div>
+                <div class="p-8 flex-grow">
+                  <div class="flex items-center mb-4">
+                    <div
+                      class="w-12 h-12 bg-gradient-to-r from-purple-400 to-pink-500 rounded-xl flex items-center justify-center mr-4 group-hover:animate-pulse"
+                    >
+                      <i data-lucide="briefcase" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <h3
+                      class="text-xl font-bold text-white group-hover:text-purple-300 transition-colors duration-300"
+                    >
+                      Working Professionals
+                    </h3>
+                  </div>
+                  <p
+                    class="text-gray-400 mb-6 group-hover:text-gray-300 transition-colors duration-300"
+                  >
+                    Upskill and transition into high-demand tech roles
+                  </p>
+                  <div class="space-y-3">
+                    <div class="flex items-start">
+                      <div
+                        class="w-2 h-2 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full mt-2 mr-3 flex-shrink-0"
+                      ></div>
+                      <span
+                        class="text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                        >Flexible learning schedules</span
+                      >
+                    </div>
+                    <div class="flex items-start">
+                      <div
+                        class="w-2 h-2 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full mt-2 mr-3 flex-shrink-0"
+                      ></div>
+                      <span
+                        class="text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                        >Career transition support</span
+                      >
+                    </div>
+                    <div class="flex items-start">
+                      <div
+                        class="w-2 h-2 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full mt-2 mr-3 flex-shrink-0"
+                      ></div>
+                      <span
+                        class="text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                        >Advanced skill development</span
+                      >
+                    </div>
+                    <div class="flex items-start">
+                      <div
+                        class="w-2 h-2 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full mt-2 mr-3 flex-shrink-0"
+                      ></div>
+                      <span
+                        class="text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                        >Networking opportunities</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Audience 3: Aspiring Developers -->
+            <div class="group">
+              <div
+                class="bg-gradient-to-br from-gray-900/60 to-black/60 backdrop-blur-lg rounded-3xl overflow-hidden border border-gray-800 hover:border-purple-500/40 transition-all duration-500 transform hover:scale-105 hover:-translate-y-4 h-full flex flex-col"
+              >
+                <div
+                  class="h-24 bg-gradient-to-r from-green-400 to-emerald-500 flex items-center justify-center text-4xl relative overflow-hidden"
+                >
+                  <div
+                    class="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent"
+                  ></div>
+                  <span class="relative z-10">💻</span>
+                </div>
+                <div class="p-8 flex-grow">
+                  <div class="flex items-center mb-4">
+                    <div
+                      class="w-12 h-12 bg-gradient-to-r from-green-400 to-emerald-500 rounded-xl flex items-center justify-center mr-4 group-hover:animate-pulse"
+                    >
+                      <i data-lucide="code" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <h3
+                      class="text-xl font-bold text-white group-hover:text-purple-300 transition-colors duration-300"
+                    >
+                      Aspiring Developers
+                    </h3>
+                  </div>
+                  <p
+                    class="text-gray-400 mb-6 group-hover:text-gray-300 transition-colors duration-300"
+                  >
+                    Start your coding journey from zero to hero
+                  </p>
+                  <div class="space-y-3">
+                    <div class="flex items-start">
+                      <div
+                        class="w-2 h-2 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full mt-2 mr-3 flex-shrink-0"
+                      ></div>
+                      <span
+                        class="text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                        >Beginner-friendly content</span
+                      >
+                    </div>
+                    <div class="flex items-start">
+                      <div
+                        class="w-2 h-2 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full mt-2 mr-3 flex-shrink-0"
+                      ></div>
+                      <span
+                        class="text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                        >Hands-on coding practice</span
+                      >
+                    </div>
+                    <div class="flex items-start">
+                      <div
+                        class="w-2 h-2 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full mt-2 mr-3 flex-shrink-0"
+                      ></div>
+                      <span
+                        class="text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                        >Mentor guidance</span
+                      >
+                    </div>
+                    <div class="flex items-start">
+                      <div
+                        class="w-2 h-2 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full mt-2 mr-3 flex-shrink-0"
+                      ></div>
+                      <span
+                        class="text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                        >Build real applications</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Audience 4: Career Changers -->
+            <div class="group">
+              <div
+                class="bg-gradient-to-br from-gray-900/60 to-black/60 backdrop-blur-lg rounded-3xl overflow-hidden border border-gray-800 hover:border-purple-500/40 transition-all duration-500 transform hover:scale-105 hover:-translate-y-4 h-full flex flex-col"
+              >
+                <div
+                  class="h-24 bg-gradient-to-r from-orange-400 to-red-500 flex items-center justify-center text-4xl relative overflow-hidden"
+                >
+                  <div
+                    class="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent"
+                  ></div>
+                  <span class="relative z-10">🚀</span>
+                </div>
+                <div class="p-8 flex-grow">
+                  <div class="flex items-center mb-4">
+                    <div
+                      class="w-12 h-12 bg-gradient-to-r from-orange-400 to-red-500 rounded-xl flex items-center justify-center mr-4 group-hover:animate-pulse"
+                    >
+                      <i
+                        data-lucide="trending-up"
+                        class="w-6 h-6 text-white"
+                      ></i>
+                    </div>
+                    <h3
+                      class="text-xl font-bold text-white group-hover:text-purple-300 transition-colors duration-300"
+                    >
+                      Career Changers
+                    </h3>
+                  </div>
+                  <p
+                    class="text-gray-400 mb-6 group-hover:text-gray-300 transition-colors duration-300"
+                  >
+                    Make a successful transition into the tech industry
+                  </p>
+                  <div class="space-y-3">
+                    <div class="flex items-start">
+                      <div
+                        class="w-2 h-2 bg-gradient-to-r from-orange-400 to-red-500 rounded-full mt-2 mr-3 flex-shrink-0"
+                      ></div>
+                      <span
+                        class="text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                        >Structured learning path</span
+                      >
+                    </div>
+                    <div class="flex items-start">
+                      <div
+                        class="w-2 h-2 bg-gradient-to-r from-orange-400 to-red-500 rounded-full mt-2 mr-3 flex-shrink-0"
+                      ></div>
+                      <span
+                        class="text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                        >Industry insights</span
+                      >
+                    </div>
+                    <div class="flex items-start">
+                      <div
+                        class="w-2 h-2 bg-gradient-to-r from-orange-400 to-red-500 rounded-full mt-2 mr-3 flex-shrink-0"
+                      ></div>
+                      <span
+                        class="text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                        >Skill assessment</span
+                      >
+                    </div>
+                    <div class="flex items-start">
+                      <div
+                        class="w-2 h-2 bg-gradient-to-r from-orange-400 to-red-500 rounded-full mt-2 mr-3 flex-shrink-0"
+                      ></div>
+                      <span
+                        class="text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                        >Career coaching</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Audience 5: Teams & Organizations -->
+            <div class="group">
+              <div
+                class="bg-gradient-to-br from-gray-900/60 to-black/60 backdrop-blur-lg rounded-3xl overflow-hidden border border-gray-800 hover:border-purple-500/40 transition-all duration-500 transform hover:scale-105 hover:-translate-y-4 h-full flex flex-col"
+              >
+                <div
+                  class="h-24 bg-gradient-to-r from-indigo-400 to-purple-500 flex items-center justify-center text-4xl relative overflow-hidden"
+                >
+                  <div
+                    class="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent"
+                  ></div>
+                  <span class="relative z-10">🏢</span>
+                </div>
+                <div class="p-8 flex-grow">
+                  <div class="flex items-center mb-4">
+                    <div
+                      class="w-12 h-12 bg-gradient-to-r from-indigo-400 to-purple-500 rounded-xl flex items-center justify-center mr-4 group-hover:animate-pulse"
+                    >
+                      <i data-lucide="users" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <h3
+                      class="text-xl font-bold text-white group-hover:text-purple-300 transition-colors duration-300"
+                    >
+                      Teams & Organizations
+                    </h3>
+                  </div>
+                  <p
+                    class="text-gray-400 mb-6 group-hover:text-gray-300 transition-colors duration-300"
+                  >
+                    Upskill your entire team with corporate training programs
+                  </p>
+                  <div class="space-y-3">
+                    <div class="flex items-start">
+                      <div
+                        class="w-2 h-2 bg-gradient-to-r from-indigo-400 to-purple-500 rounded-full mt-2 mr-3 flex-shrink-0"
+                      ></div>
+                      <span
+                        class="text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                        >Custom training programs</span
+                      >
+                    </div>
+                    <div class="flex items-start">
+                      <div
+                        class="w-2 h-2 bg-gradient-to-r from-indigo-400 to-purple-500 rounded-full mt-2 mr-3 flex-shrink-0"
+                      ></div>
+                      <span
+                        class="text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                        >Team progress tracking</span
+                      >
+                    </div>
+                    <div class="flex items-start">
+                      <div
+                        class="w-2 h-2 bg-gradient-to-r from-indigo-400 to-purple-500 rounded-full mt-2 mr-3 flex-shrink-0"
+                      ></div>
+                      <span
+                        class="text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                        >Bulk pricing available</span
+                      >
+                    </div>
+                    <div class="flex items-start">
+                      <div
+                        class="w-2 h-2 bg-gradient-to-r from-indigo-400 to-purple-500 rounded-full mt-2 mr-3 flex-shrink-0"
+                      ></div>
+                      <span
+                        class="text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                        >Dedicated support</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Audience 6: Entrepreneurs -->
+            <div class="group">
+              <div
+                class="bg-gradient-to-br from-gray-900/60 to-black/60 backdrop-blur-lg rounded-3xl overflow-hidden border border-gray-800 hover:border-purple-500/40 transition-all duration-500 transform hover:scale-105 hover:-translate-y-4 h-full flex flex-col"
+              >
+                <div
+                  class="h-24 bg-gradient-to-r from-pink-400 to-rose-500 flex items-center justify-center text-4xl relative overflow-hidden"
+                >
+                  <div
+                    class="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent"
+                  ></div>
+                  <span class="relative z-10">💡</span>
+                </div>
+                <div class="p-8 flex-grow">
+                  <div class="flex items-center mb-4">
+                    <div
+                      class="w-12 h-12 bg-gradient-to-r from-pink-400 to-rose-500 rounded-xl flex items-center justify-center mr-4 group-hover:animate-pulse"
+                    >
+                      <i data-lucide="rocket" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <h3
+                      class="text-xl font-bold text-white mb-4 group-hover:text-purple-300 transition-colors duration-300"
+                    >
+                      Entrepreneurs
+                    </h3>
+                  </div>
+                  <p
+                    class="text-gray-400 mb-6 group-hover:text-gray-300 transition-colors duration-300"
+                  >
+                    Build the technical skills needed to launch your startup
+                  </p>
+                  <div class="space-y-3">
+                    <div class="flex items-start">
+                      <div
+                        class="w-2 h-2 bg-gradient-to-r from-pink-400 to-rose-500 rounded-full mt-2 mr-3 flex-shrink-0"
+                      ></div>
+                      <span
+                        class="text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                        >MVP development skills</span
+                      >
+                    </div>
+                    <div class="flex items-start">
+                      <div
+                        class="w-2 h-2 bg-gradient-to-r from-pink-400 to-rose-500 rounded-full mt-2 mr-3 flex-shrink-0"
+                      ></div>
+                      <span
+                        class="text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                        >Tech stack guidance</span
+                      >
+                    </div>
+                    <div class="flex items-start">
+                      <div
+                        class="w-2 h-2 bg-gradient-to-r from-pink-400 to-rose-500 rounded-full mt-2 mr-3 flex-shrink-0"
+                      ></div>
+                      <span
+                        class="text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                        >Startup-focused projects</span
+                      >
+                    </div>
+                    <div class="flex items-start">
+                      <div
+                        class="w-2 h-2 bg-gradient-to-r from-pink-400 to-rose-500 rounded-full mt-2 mr-3 flex-shrink-0"
+                      ></div>
+                      <span
+                        class="text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                        >Investor pitch preparation</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========== Involvement Section (Community Voices) =========== -->
+      <section id="involvement" class="py-20 relative overflow-hidden">
+        <!-- Background elements -->
+        <div class="absolute inset-0">
+          <div
+            class="absolute top-1/4 left-1/4 w-64 h-64 bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-full blur-3xl animate-pulse"
+          ></div>
+          <div
+            class="absolute bottom-1/4 right-1/4 w-64 h-64 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-full blur-3xl animate-pulse delay-1000"
+          ></div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <!-- Section Header -->
+          <div class="text-center mb-16">
+            <h2
+              class="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent"
+            >
+              Community
+              <span
+                class="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent"
+                >Voices</span
+              >
+            </h2>
+          </div>
+          <!-- Community Voices Testimonials -->
+          <div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <!-- Voice 1 -->
+              <div class="group">
+                <div
+                  class="bg-gradient-to-br from-gray-900/60 to-black/60 backdrop-blur-lg rounded-3xl p-8 border border-gray-800 hover:border-purple-500/40 transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 flex flex-col items-center text-center h-full"
+                >
+                  <div class="text-4xl mb-4">👨‍💼</div>
+                  <p
+                    class="text-gray-300 mb-6 italic flex-grow group-hover:text-white transition-colors duration-300"
+                  >
+                    "This was more than just a workshop - it changed how I see
+                    technology."
+                  </p>
+                  <div>
+                    <div class="font-semibold text-white">Ritika M.</div>
+                  </div>
+                </div>
+              </div>
+              <!-- Voice 2 -->
+              <div class="group">
+                <div
+                  class="bg-gradient-to-br from-gray-900/60 to-black/60 backdrop-blur-lg rounded-3xl p-8 border border-gray-800 hover:border-purple-500/40 transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 flex flex-col items-center text-center h-full"
+                >
+                  <div class="text-4xl mb-4">👩‍💻</div>
+                  <p
+                    class="text-gray-300 mb-6 italic flex-grow group-hover:text-white transition-colors duration-300"
+                  >
+                    "The animation and music tools were amazing. I didn't know I
+                    could create something like that."
+                  </p>
+                  <div>
+                    <div class="font-semibold text-white">Devansh P.</div>
+                  </div>
+                </div>
+              </div>
+              <!-- Voice 3 -->
+              <div class="group">
+                <div
+                  class="bg-gradient-to-br from-gray-900/60 to-black/60 backdrop-blur-lg rounded-3xl p-8 border border-gray-800 hover:border-purple-500/40 transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 flex flex-col items-center text-center h-full"
+                >
+                  <div class="text-4xl mb-4">👨‍🎓</div>
+                  <p
+                    class="text-gray-300 mb-6 italic flex-grow group-hover:text-white transition-colors duration-300"
+                  >
+                    "I finally understood how automation works and even built a
+                    working bot."
+                  </p>
+                  <div>
+                    <div class="font-semibold text-white">Aryan S.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========== Resources Section =========== -->
+      <section id="resources" class="py-20 relative overflow-hidden">
+        <!-- Background elements -->
+        <div class="absolute inset-0">
+          <div
+            class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-500/3 via-transparent to-purple-500/3"
+          ></div>
+          <div
+            class="absolute top-1/3 right-1/4 w-64 h-64 bg-green-500/10 rounded-full blur-3xl animate-pulse"
+          ></div>
+          <div
+            class="absolute bottom-1/3 left-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-1000"
+          ></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <!-- Section Header -->
+          <div class="text-center mb-16">
+            <h2
+              class="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent"
+            >
+              The Learning
+              <span
+                class="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent"
+                >Resources</span
+              >
+            </h2>
+            <p class="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
+              Access our comprehensive library of educational content, from
+              beginner tutorials to advanced industry insights
+            </p>
+          </div>
+          <!-- Resource Categories -->
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20"
+          >
+            <!-- Category 1: Blog -->
+            <div class="group">
+              <div
+                class="bg-gradient-to-br from-gray-900/60 to-black/60 backdrop-blur-lg rounded-2xl p-8 border border-gray-800 hover:border-purple-500/40 transition-all duration-300 transform hover:scale-105 hover:-translate-y-2 text-center h-full"
+              >
+                <div
+                  class="w-16 h-16 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:animate-bounce"
+                >
+                  <i data-lucide="book-open" class="w-8 h-8 text-white"></i>
+                </div>
+                <h3
+                  class="text-xl font-bold text-white mb-3 group-hover:text-purple-300 transition-colors duration-300"
+                >
+                  Blog Articles
+                </h3>
+                <p
+                  class="text-gray-400 mb-4 group-hover:text-gray-300 transition-colors duration-300"
+                >
+                  In-depth tutorials, industry insights, and coding best
+                  practices
+                </p>
+                <div
+                  class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-500 bg-clip-text text-transparent"
+                >
+                  150+
+                </div>
+              </div>
+            </div>
+            <!-- Category 2: Videos -->
+            <div class="group">
+              <div
+                class="bg-gradient-to-br from-gray-900/60 to-black/60 backdrop-blur-lg rounded-2xl p-8 border border-gray-800 hover:border-purple-500/40 transition-all duration-300 transform hover:scale-105 hover:-translate-y-2 text-center h-full"
+              >
+                <div
+                  class="w-16 h-16 bg-gradient-to-r from-red-400 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:animate-bounce"
+                >
+                  <i data-lucide="video" class="w-8 h-8 text-white"></i>
+                </div>
+                <h3
+                  class="text-xl font-bold text-white mb-3 group-hover:text-purple-300 transition-colors duration-300"
+                >
+                  Video Tutorials
+                </h3>
+                <p
+                  class="text-gray-400 mb-4 group-hover:text-gray-300 transition-colors duration-300"
+                >
+                  Step-by-step video guides and coding demonstrations
+                </p>
+                <div
+                  class="text-2xl font-bold bg-gradient-to-r from-red-400 to-pink-500 bg-clip-text text-transparent"
+                >
+                  75+
+                </div>
+              </div>
+            </div>
+            <!-- Category 3: Docs -->
+            <div class="group">
+              <div
+                class="bg-gradient-to-br from-gray-900/60 to-black/60 backdrop-blur-lg rounded-2xl p-8 border border-gray-800 hover:border-purple-500/40 transition-all duration-300 transform hover:scale-105 hover:-translate-y-2 text-center h-full"
+              >
+                <div
+                  class="w-16 h-16 bg-gradient-to-r from-purple-400 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:animate-bounce"
+                >
+                  <i data-lucide="file-text" class="w-8 h-8 text-white"></i>
+                </div>
+                <h3
+                  class="text-xl font-bold text-white mb-3 group-hover:text-purple-300 transition-colors duration-300"
+                >
+                  Documentation
+                </h3>
+                <p
+                  class="text-gray-400 mb-4 group-hover:text-gray-300 transition-colors duration-300"
+                >
+                  Comprehensive guides and reference materials
+                </p>
+                <div
+                  class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent"
+                >
+                  200+
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Featured Content -->
+          <div class="mb-20">
+            <h3
+              class="text-3xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent"
+            >
+              Featured Content
+            </h3>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <!-- Content 1: API & Web Services -->
+              <div class="group">
+                <div
+                  class="bg-gradient-to-br from-gray-900/60 to-black/60 backdrop-blur-lg rounded-3xl overflow-hidden border border-gray-800 hover:border-purple-500/40 transition-all duration-500 transform hover:scale-105 hover:-translate-y-4 h-full flex flex-col"
+                >
+                  <div
+                    class="h-48 flex items-center justify-center relative overflow-hidden rounded-t-3xl"
+                    style="
+                      background: radial-gradient(
+                        circle at center,
+                        rgba(128, 90, 213, 0.3) 0%,
+                        rgba(255, 0, 128, 0.2) 70%,
+                        transparent 100%
+                      );
+                    "
+                  >
+                    <i
+                      data-lucide="network"
+                      class="w-24 h-24 text-purple-300 opacity-60 animate-pulse"
+                    ></i>
+                  </div>
+                  <div class="p-6 flex-grow flex flex-col">
+                    <h4
+                      class="text-xl font-bold text-white mb-3 group-hover:text-purple-300 transition-colors duration-300 line-clamp-2"
+                    >
+                      API & Web Services
+                    </h4>
+                    <p
+                      class="text-gray-400 mb-4 line-clamp-3 flex-grow group-hover:text-gray-300 transition-colors duration-300"
+                    >
+                      Learn the fundamentals and advanced concepts of APIs and
+                      web services with our comprehensive course. Master API
+                      concepts and build practical skills through hands-on
+                      modules, including RESTful and SOAP web services. Enhance
+                      your abilities by creating secure, efficient APIs and
+                      integrating them into real-world applications.
+                    </p>
+                    <div class="flex items-center justify-end mt-auto">
+                      <a href="https://aqe8bc1whfwa.swipepages.net/API_Web_Services" target="_blank" rel="noopener noreferrer"
+                        class="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-4 py-2 text-sm rounded-lg transition-all duration-300 transform group-hover:scale-105"
+                      >
+                        Read More<i
+                          data-lucide="external-link"
+                          class="w-3 h-3 ml-1 inline-block"
+                        ></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Content 2: Python Training -->
+              <div class="group">
+                <div
+                  class="bg-gradient-to-br from-gray-900/60 to-black/60 backdrop-blur-lg rounded-3xl overflow-hidden border border-gray-800 hover:border-purple-500/40 transition-all duration-500 transform hover:scale-105 hover:-translate-y-4 h-full flex flex-col"
+                >
+                  <div
+                    class="h-48 flex items-center justify-center relative overflow-hidden rounded-t-3xl"
+                    style="
+                      background: radial-gradient(
+                        circle at center,
+                        rgba(45, 212, 191, 0.3) 0%,
+                        rgba(34, 197, 94, 0.2) 70%,
+                        transparent 100%
+                      );
+                    "
+                  >
+                    <i
+                      data-lucide="terminal"
+                      class="w-24 h-24 text-green-300 opacity-60 animate-pulse"
+                    ></i>
+                  </div>
+                  <div class="p-6 flex-grow flex flex-col">
+                    <h4
+                      class="text-xl font-bold text-white mb-3 group-hover:text-purple-300 transition-colors duration-300 line-clamp-2"
+                    >
+                      Python Training
+                    </h4>
+                    <p
+                      class="text-gray-400 mb-4 line-clamp-3 flex-grow group-hover:text-gray-300 transition-colors duration-300"
+                    >
+                      Learn the fundamentals and advanced concepts of Python
+                      Programming. Master Python concepts with our step-by-step
+                      learning modules. Enhance your skills by creating a web
+                      application.
+                    </p>
+                    <div class="flex items-center justify-end mt-auto">
+                      <a href="https://aqe8bc1whfwa.swipepages.net/python-training-course" target="_blank" rel="noopener noreferrer"
+                        class="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-4 py-2 text-sm rounded-lg transition-all duration-300 transform group-hover:scale-105"
+                      >
+                        Read More<i
+                          data-lucide="external-link"
+                          class="w-3 h-3 ml-1 inline-block"
+                        ></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Content 3: Cloud Computing -->
+              <div class="group">
+                <div
+                  class="bg-gradient-to-br from-gray-900/60 to-black/60 backdrop-blur-lg rounded-3xl overflow-hidden border border-gray-800 hover:border-purple-500/40 transition-all duration-500 transform hover:scale-105 hover:-translate-y-4 h-full flex flex-col"
+                >
+                  <div
+                    class="h-48 flex items-center justify-center relative overflow-hidden rounded-t-3xl"
+                    style="
+                      background: radial-gradient(
+                        circle at center,
+                        rgba(79, 70, 229, 0.3) 0%,
+                        rgba(168, 85, 247, 0.2) 70%,
+                        transparent 100%
+                      );
+                    "
+                  >
+                    <i
+                      data-lucide="cloud"
+                      class="w-24 h-24 text-indigo-300 opacity-60 animate-pulse"
+                    ></i>
+                  </div>
+                  <div class="p-6 flex-grow flex flex-col">
+                    <h4
+                      class="text-xl font-bold text-white mb-3 group-hover:text-purple-300 transition-colors duration-300 line-clamp-2"
+                    >
+                      Cloud Computing
+                    </h4>
+                    <p
+                      class="text-gray-400 mb-4 line-clamp-3 flex-grow group-hover:text-gray-300 transition-colors duration-300"
+                    >
+                      Learn the fundamentals and advanced concepts of Cloud
+                      Computing. Master cloud concepts with our step-by-step
+                      learning modules. Enhance your skills with hands-on labs
+                      and real-world applications.
+                    </p>
+                    <div class="flex items-center justify-end mt-auto">
+                      <a href="https://aqe8bc1whfwa.swipepages.net/cloud_computing_course" target="_blank" rel="noopener noreferrer"
+                        class="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-4 py-2 text-sm rounded-lg transition-all duration-300 transform group-hover:scale-105"
+                      >
+                        Read More<i
+                          data-lucide="external-link"
+                          class="w-3 h-3 ml-1 inline-block"
+                        ></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========== Contact Section =========== -->
+      <section id="contact" class="py-20 relative overflow-hidden">
+        <!-- Background elements -->
+        <div class="absolute inset-0">
+          <div
+            class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-500/5 to-purple-500/5 rounded-full blur-3xl"
+          ></div>
+          <div
+            class="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-pink-500/5 to-orange-500/5 rounded-full blur-3xl"
+          ></div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <!-- Section Header -->
+          <div class="text-center mb-16">
+            <h2
+              class="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent"
+            >
+              Get In
+              <span
+                class="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent"
+                >Touch</span
+              >
+            </h2>
+            <p class="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
+              Have questions about our courses or need guidance on your learning
+              journey? We're here to help you succeed.
+            </p>
+          </div>
+          <!-- Contact Info Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            <!-- Card 1: Email -->
+            <div class="group">
+              <div
+                class="bg-gradient-to-br from-gray-900/60 to-black/60 backdrop-blur-lg rounded-2xl p-8 border border-gray-800 hover:border-purple-500/40 transition-all duration-300 transform hover:scale-105 hover:-translate-y-2 text-center"
+              >
+                <div
+                  class="w-16 h-16 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:animate-bounce"
+                >
+                  <i data-lucide="mail" class="w-8 h-8 text-white"></i>
+                </div>
+                <h3
+                  class="text-xl font-bold text-white mb-2 group-hover:text-purple-300 transition-colors duration-300"
+                >
+                  Email Us
+                </h3>
+                <p class="text-lg text-gray-300 mb-1">connect@labdox.com</p>
+                <p
+                  class="text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                >
+                  We reply within 24 hours
+                </p>
+              </div>
+            </div>
+            <!-- Card 2: Call -->
+            <div class="group">
+              <div
+                class="bg-gradient-to-br from-gray-900/60 to-black/60 backdrop-blur-lg rounded-2xl p-8 border border-gray-800 hover:border-purple-500/40 transition-all duration-300 transform hover:scale-105 hover:-translate-y-2 text-center"
+              >
+                <div
+                  class="w-16 h-16 bg-gradient-to-r from-green-400 to-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:animate-bounce"
+                >
+                  <i data-lucide="phone" class="w-8 h-8 text-white"></i>
+                </div>
+                <h3
+                  class="text-xl font-bold text-white mb-2 group-hover:text-purple-300 transition-colors duration-300"
+                >
+                  Call Us
+                </h3>
+                <p class="text-lg text-gray-300 mb-1">7249889180</p>
+                <p
+                  class="text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                >
+                  Mon-Fri, 10:00 AM - 6:00 PM
+                </p>
+              </div>
+            </div>
+            <!-- Card 3: Visit -->
+            <div class="group">
+              <div
+                class="bg-gradient-to-br from-gray-900/60 to-black/60 backdrop-blur-lg rounded-2xl p-8 border border-gray-800 hover:border-purple-500/40 transition-all duration-300 transform hover:scale-105 hover:-translate-y-2 text-center"
+              >
+                <div
+                  class="w-16 h-16 bg-gradient-to-r from-purple-400 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:animate-bounce"
+                >
+                  <i data-lucide="map-pin" class="w-8 h-8 text-white"></i>
+                </div>
+                <h3
+                  class="text-xl font-bold text-white mb-2 group-hover:text-purple-300 transition-colors duration-300"
+                >
+                  Visit Us
+                </h3>
+                <p class="text-lg text-gray-300 mb-1">Maharashtra, India</p>
+                <p
+                  class="text-sm text-gray-500 group-hover:text-gray-400 transition-colors duration-300"
+                >
+                  Pune
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- Contact Form -->
+            <div
+              class="bg-gradient-to-br from-gray-900/60 to-black/60 backdrop-blur-lg rounded-3xl p-8 border border-gray-800"
+            >
+              <h3 class="text-2xl font-bold text-white mb-6">
+                Send us a Message
+              </h3>
+              <form id="contact-form" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label
+                      for="full-name"
+                      class="block text-gray-300 mb-2 text-sm font-medium"
+                      >Full Name</label
+                    ><input
+                      type="text"
+                      id="full-name"
+                      name="name"
+                      class="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors duration-300"
+                      placeholder="John Doe"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label
+                      for="email-address"
+                      class="block text-gray-300 mb-2 text-sm font-medium"
+                      >Email Address</label
+                    ><input
+                      type="email"
+                      id="email-address"
+                      name="email"
+                      class="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors duration-300"
+                      placeholder="john@example.com"
+                      required
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label
+                    for="subject-select"
+                    class="block text-gray-300 mb-2 text-sm font-medium"
+                    >Subject</label
+                  >
+                  <select
+                    id="subject-select"
+                    name="subject"
+                    class="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl text-white focus:outline-none focus:border-purple-500 transition-colors duration-300"
+                    required
+                  >
+                    <option value="">Select a subject</option>
+                    <option value="course-inquiry">Course Inquiry</option>
+                    <option value="general">General Question</option>
+                  </select>
+                </div>
+                <div>
+                  <label
+                    for="message-text"
+                    class="block text-gray-300 mb-2 text-sm font-medium"
+                    >Message</label
+                  >
+                  <textarea
+                    id="message-text"
+                    name="message"
+                    rows="5"
+                    class="w-full px-4 py-3 bg-black/50 border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors duration-300 resize-none"
+                    placeholder="Tell us how we can help you..."
+                    required
+                  ></textarea>
+                </div>
+                <button
+                  type="submit"
+                  class="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white py-3 font-medium rounded-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center"
+                >
+                  Send Message <i data-lucide="send" class="w-4 h-4 ml-2"></i>
+                </button>
+              </form>
+            </div>
+            <!-- Other Ways to Get Help -->
+            <div
+              class="bg-gradient-to-br from-gray-900/60 to-black/60 backdrop-blur-lg rounded-2xl p-8 border border-gray-800"
+            >
+              <h3 class="text-xl font-bold text-white mb-6">
+                Other Ways to Get Help
+              </h3>
+              <div class="space-y-4">
+                <div class="group cursor-pointer">
+                  <div
+                    class="flex items-start p-4 rounded-xl bg-black/30 hover:bg-black/50 transition-all duration-300 border border-gray-800 hover:border-purple-500/40"
+                  >
+                    <div
+                      class="w-10 h-10 bg-gradient-to-r from-orange-400 to-red-500 rounded-lg flex items-center justify-center mr-4 flex-shrink-0 group-hover:animate-pulse"
+                    >
+                      <i
+                        data-lucide="message-circle"
+                        class="w-5 h-5 text-white"
+                      ></i>
+                    </div>
+                    <div class="flex-1">
+                      <h4
+                        class="font-semibold text-white mb-1 group-hover:text-purple-300 transition-colors duration-300"
+                      >
+                        Live Chat
+                      </h4>
+                      <p
+                        class="text-sm text-gray-400 mb-1 group-hover:text-gray-300 transition-colors duration-300"
+                      >
+                        Get instant help from our support team
+                      </p>
+                      <span class="text-xs text-gray-500">24/7</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="group cursor-pointer">
+                  <div
+                    class="flex items-start p-4 rounded-xl bg-black/30 hover:bg-black/50 transition-all duration-300 border border-gray-800 hover:border-purple-500/40"
+                  >
+                    <div
+                      class="w-10 h-10 bg-gradient-to-r from-indigo-400 to-purple-500 rounded-lg flex items-center justify-center mr-4 flex-shrink-0 group-hover:animate-pulse"
+                    >
+                      <i data-lucide="users" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <div class="flex-1">
+                      <h4
+                        class="font-semibold text-white mb-1 group-hover:text-purple-300 transition-colors duration-300"
+                      >
+                        Community Forum
+                      </h4>
+                      <p
+                        class="text-sm text-gray-400 mb-1 group-hover:text-gray-300 transition-colors duration-300"
+                      >
+                        Connect with other learners and get peer support
+                      </p>
+                      <span class="text-xs text-gray-500">Always Active</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="group cursor-pointer">
+                  <div
+                    class="flex items-start p-4 rounded-xl bg-black/30 hover:bg-black/50 transition-all duration-300 border border-gray-800 hover:border-purple-500/40"
+                  >
+                    <div
+                      class="w-10 h-10 bg-gradient-to-r from-pink-400 to-rose-500 rounded-lg flex items-center justify-center mr-4 flex-shrink-0 group-hover:animate-pulse"
+                    >
+                      <i data-lucide="globe" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <div class="flex-1">
+                      <h4
+                        class="font-semibold text-white mb-1 group-hover:text-purple-300 transition-colors duration-300"
+                      >
+                        Knowledge Base
+                      </h4>
+                      <p
+                        class="text-sm text-gray-400 mb-1 group-hover:text-gray-300 transition-colors duration-300"
+                      >
+                        Browse our comprehensive help articles
+                      </p>
+                      <span class="text-xs text-gray-500">500+ Articles</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- =========== Footer =========== -->
+    <footer
+      id="footer"
+      class="relative bg-gradient-to-b from-black to-gray-900 border-t border-gray-800"
+    >
+      <!-- Background elements -->
+      <div class="absolute inset-0 overflow-hidden">
+        <div
+          class="absolute -top-32 left-1/4 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl"
+        ></div>
+        <div
+          class="absolute -top-32 right-1/4 w-64 h-64 bg-pink-500/5 rounded-full blur-3xl"
+        ></div>
+      </div>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <!-- Main Footer Content -->
+        <div class="py-16 grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <!-- Brand Section -->
+          <div class="lg:col-span-1">
+            <div class="flex items-center space-x-2 mb-6">
+              
+              <span
+                class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent"
+              >
+                Labdox
+              </span>
+            </div>
+            <p class="text-gray-400 mb-6 leading-relaxed">
+              Empowering the next generation of tech innovators through
+              immersive, practical learning experiences that bridge the gap
+              between education and industry.
+            </p>
+            <div class="space-y-3">
+              <div class="flex items-center text-gray-400">
+                <i data-lucide="mail" class="w-4 h-4 mr-3 text-purple-400"></i>
+                <span class="text-sm">connect@labdox.com</span>
+              </div>
+              <div class="flex items-center text-gray-400">
+                <i
+                  data-lucide="phone"
+                  class="w-4 h-4 mr-3 text-purple-400"
+                ></i>
+                <span class="text-sm">7249889180</span>
+              </div>
+              <div class="flex items-center text-gray-400">
+                <i
+                  data-lucide="map-pin"
+                  class="w-4 h-4 mr-3 text-purple-400"
+                ></i>
+                <span class="text-sm">Pune, Maharashtra, India</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Company Links Section -->
+            <div class="lg:col-span-1">
+            <h3 class="text-white font-semibold mb-4">Company</h3>
+            <ul class="space-y-3">
+              <li>
+              <a
+                href="https://aqe8bc1whfwa.swipepages.net/Aboutus"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-gray-400 hover:text-white transition-colors duration-300 text-sm hover:translate-x-1 transform inline-block"
+              >
+                About Us
+              </a>
+              </li>
+              <li>
+              <a
+                href="https://aqe8bc1whfwa.swipepages.net/Aboutus"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-gray-400 hover:text-white transition-colors duration-300 text-sm hover:translate-x-1 transform inline-block"
+              >
+                Our Mission
+              </a>
+              </li>
+                <a
+                  href="#contact"
+                  class="text-gray-400 hover:text-white transition-colors duration-300 text-sm hover:translate-x-1 transform inline-block"
+                >
+                  Contact Us
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- Bottom Section -->
+      <div class="py-8 border-t border-gray-800">
+        <div class="flex flex-col lg:flex-row items-center justify-between">
+          <div class="text-gray-500 text-sm mb-6 lg:mb-0">
+            © 2024 Labdox. All rights reserved.
+          </div>
+          <div class="flex items-center space-x-4">
+            <a
+            href="https://www.facebook.com/labdox/"
+            class="text-gray-500 hover:text-blue-400 transition-colors duration-300 transform hover:scale-110"
+            aria-label="Facebook"
+            target="_blank"
+            rel="noopener noreferrer"
+            ><i data-lucide="facebook" class="w-5 h-5"></i
+            ></a>
+            <a
+            href="https://www.linkedin.com/company/labdox/posts/?feedView=all"
+            class="text-gray-500 hover:text-blue-600 transition-colors duration-300 transform hover:scale-110"
+            aria-label="LinkedIn"
+            target="_blank"
+            rel="noopener noreferrer"
+            ><i data-lucide="linkedin" class="w-5 h-5"></i
+            ></a>
+            <a
+            href="https://youtube.com/@dockatlabdox?feature=shared"
+            class="text-gray-500 hover:text-red-500 transition-colors duration-300 transform hover:scale-110"
+            aria-label="YouTube"
+            target="_blank"
+            rel="noopener noreferrer"
+            ><i data-lucide="youtube" class="w-5 h-5"></i
+            ></a>
+            <a
+            href="https://x.com/labdox"
+            class="text-gray-500 hover:text-blue-400 transition-colors duration-300 transform hover:scale-110"
+            aria-label="Twitter"
+            target="_blank"
+            rel="noopener noreferrer"
+            ><i data-lucide="twitter" class="w-5 h-5"></i
+            ></a>
+            <a
+            href="https://www.instagram.com/dock_labdox/"
+            class="text-gray-500 hover:text-pink-500 transition-colors duration-300 transform hover:scale-110"
+            aria-label="Instagram"
+            target="_blank"
+            rel="noopener noreferrer"
+            ><i data-lucide="instagram" class="w-5 h-5"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+      <!-- Scroll to Top Button -->
+      <button
+        id="scroll-to-top"
+        class="fixed bottom-8 right-8 w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-full flex items-center justify-center text-white shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 transform hover:scale-110 z-50"
+        aria-label="Scroll to top"
+      >
+        <i data-lucide="arrow-up" class="w-5 h-5"></i>
+      </button>
+      </div>
+    </footer>
+
+    <!-- Custom Modal for Alerts -->
+    <div id="customAlertModal" class="custom-modal">
+        <div class="custom-modal-content">
+            <div class="custom-modal-header">
+                <h5 class="modal-title" id="customAlertModalTitle">Alert</h5>
+                <span class="custom-close-button" onclick="closeCustomAlert()">&times;</span>
+            </div>
+            <div class="custom-modal-body">
+                <p id="customAlertModalMessage"></p>
+            </div>
+            <div class="custom-modal-footer">
+                <button type="button" class="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-4 py-2 rounded-md transition-all duration-300" onclick="closeCustomAlert()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom JavaScript -->
+    <script>
+      // Custom Alert Functions
+      function showCustomAlert(message, title = 'Alert') {
+          document.getElementById('customAlertModalTitle').innerText = title;
+          document.getElementById('customAlertModalMessage').innerText = message;
+          document.getElementById('customAlertModal').style.display = 'flex'; // Use flex to center
+      }
+
+      function closeCustomAlert() {
+          document.getElementById('customAlertModal').style.display = 'none';
+      }
+
+      // Initialize Lucide Icons
+      lucide.createIcons();
+
+      // Mobile Menu Toggle
+      const mobileMenuButton = document.getElementById("mobile-menu-button");
+      const mobileMenu = document.getElementById("mobile-menu");
+      const menuIconOpen = document.getElementById("menu-icon-open");
+      const menuIconClose = document.getElementById("menu-icon-close");
+      const mobileNavLinks = document.querySelectorAll(".mobile-nav-link");
+
+      mobileMenuButton.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+        menuIconOpen.classList.toggle("hidden");
+        menuIconClose.classList.toggle("hidden");
+      });
+
+      mobileNavLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+          mobileMenu.classList.add("hidden");
+          menuIconOpen.classList.remove("hidden");
+          menuIconClose.classList.add("hidden");
+        });
+      });
+
+      // Navigation Bar Scroll Effect
+      const navigation = document.getElementById("navigation");
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 50) {
+          navigation.classList.add("bg-black/80", "backdrop-blur-lg", "shadow-xl");
+        } else {
+          navigation.classList.remove(
+            "bg-black/80",
+            "backdrop-blur-lg",
+            "shadow-xl"
+          );
+        }
+      });
+
+      // Scroll to Top Button
+      const scrollToTopButton = document.getElementById("scroll-to-top");
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 300) {
+          scrollToTopButton.classList.add("!block");
+          scrollToTopButton.classList.remove("hidden");
+        } else {
+          scrollToTopButton.classList.remove("!block");
+          scrollToTopButton.classList.add("hidden");
+        }
+      });
+
+      scrollToTopButton.addEventListener("click", () => {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+        });
+      });
+
+      // Smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+      });
+
+      // Carousel for Popular Courses
+      const courses = [
+        {
+          title: "C# Programming for Engineers",
+          description: "Build real-world applications using C# and .NET framework.",
+          price: "₹1,000",
+          duration: "40 hrs",
+          level: "Graduate",
+          emoji: "💻",
+        },
+        {
+          title: "UI/UX Design & Research",
+          description: "Master design research, wireframing, prototyping and usability testing—mirrors LabDox’s UI/UX program.",
+          price: "₹1,500",
+          duration: "35 hrs",
+          level: "Graduate",
+          emoji: "🎨",
+        },
+        {
+          title: "Data Analytics & Visualization",
+          description: "Learn to analyze complex datasets using Python, R, Power BI.",
+          price: "₹1,500",
+          duration: "45 hrs",
+          level: "Graduate",
+          emoji: "�",
+        },
+        {
+          title: "AI & Machine Learning Fundamentals",
+          description: "Covers ML algorithms, model training and evaluation—reflecting LabDox’s ML certificate.",
+          price: "₹3,500",
+          duration: "50 hrs",
+          level: "Graduate",
+          emoji: "🧠",
+        },
+        {
+          title: "Product Design & Innovation",
+          description: "From ideation to prototyping, focusing on user-centric design and market fit.",
+          price: "₹2,500",
+          duration: "40 hrs",
+          level: "Graduate",
+          emoji: "💡",
+        },
+        {
+          title: "Design Thinking Workshop",
+          description: "Solve real-world problems using empathy, ideation, iteration and testing.",
+          price: "₹1,500",
+          duration: "25 hrs",
+          level: "Graduate",
+          emoji: "🧩",
+        },
+        {
+          title: "Full Stack Web Development",
+          description: "Frontend, backend, and deployment using JavaScript, Node.js, databases.",
+          price: "₹1,000",
+          duration: "60 hrs",
+          level: "Graduate",
+          emoji: "🌐",
+        },
+        {
+          title: "Cloud Computing with AWS/Azure",
+          description: "Core cloud services, deployment, containerization and scalability.",
+          price: "₹750",
+          duration: "45 hrs",
+          level: "Graduate",
+          emoji: "☁️",
+        },
+        {
+          title: "Digital Manufacturing & 3D Printing",
+          description: "CNC, additive manufacturing, 3D workflows.",
+          price: "₹11,000",
+          duration: "40 hrs",
+          level: "Graduate",
+          emoji: "⚙️",
+        },
+        {
+          title: "Cybersecurity Essentials",
+          description: "Foundational knowledge of cybersecurity principles, threats, and defense mechanisms.",
+          price: "₹2,000",
+          duration: "30 hrs",
+          level: "Graduate",
+          emoji: "🔒",
+        },
+      ];
+
+      const carouselContainer = document.getElementById("courses-carousel");
+      const carouselPrevBtn = document.getElementById("carousel-prev");
+      const carouselNextBtn = document.getElementById("carousel-next");
+
+      function populateCoursesCarousel() {
+        carouselContainer.innerHTML = ""; // Clear existing content
+        courses.forEach((course) => {
+          const courseCard = `
+            <div class="carousel-item group bg-gradient-to-br from-gray-900/60 to-black/60 backdrop-blur-lg rounded-3xl overflow-hidden border border-gray-800 hover:border-purple-500/40 transition-all duration-500 transform hover:scale-105 hover:-translate-y-4 p-6 flex flex-col justify-between">
+                <div class="h-48 bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center text-6xl rounded-lg mb-4">
+                    ${course.emoji}
+                </div>
+                <h4 class="text-xl font-bold text-white mb-3 group-hover:text-purple-300 transition-colors duration-300 line-clamp-2">
+                    ${course.title}
+                </h4>
+                <p class="text-gray-400 mb-4 line-clamp-3 flex-grow">
+                    ${course.description}
+                </p>
+                <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+                    <div class="flex items-center">
+                        <i data-lucide="clock" class="w-4 h-4 mr-1"></i>${course.duration}
+                    </div>
+                    <div class="flex items-center">
+                        <i data-lucide="coins" class="w-4 h-4 mr-1"></i>${course.price}
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <span class="inline-block bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-300 px-3 py-1 rounded-full text-xs font-medium border border-purple-500/30">
+                        ${course.level}
+                    </span>
+                </div>
+                <button class="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-medium py-2 rounded-xl transition-all duration-300 transform group-hover:scale-105">
+                    Enroll Now
+                </button>
+            </div>
+          `;
+          carouselContainer.insertAdjacentHTML("beforeend", courseCard);
+        });
+        // Re-create lucide icons after injecting new HTML
+        lucide.createIcons();
+      }
+
+      populateCoursesCarousel();
+
+      carouselNextBtn.addEventListener("click", () => {
+        // Calculate item width including margin/gap for accurate scroll
+        const item = carouselContainer.querySelector('.carousel-item');
+        if (item) {
+            const itemWidth = item.offsetWidth;
+            const style = window.getComputedStyle(carouselContainer);
+            const gap = parseFloat(style.getPropertyValue('column-gap')) || parseFloat(style.getPropertyValue('gap')) || 0; // Get actual gap
+            carouselContainer.scrollBy({
+                left: itemWidth + gap,
+                behavior: "smooth"
+            });
+        }
+      });
+
+      carouselPrevBtn.addEventListener("click", () => {
+        const item = carouselContainer.querySelector('.carousel-item');
+        if (item) {
+            const itemWidth = item.offsetWidth;
+            const style = window.getComputedStyle(carouselContainer);
+            const gap = parseFloat(style.getPropertyValue('column-gap')) || parseFloat(style.getPropertyValue('gap')) || 0;
+            carouselContainer.scrollBy({
+                left: -(itemWidth + gap),
+                behavior: "smooth"
+            });
+        }
+      });
+
+      // New Testimonial Carousel
+      const testimonialsData = [
+        { comment: "Labdox provides excellent practical learning experience.", name: "Nachiket Rameshwar Tekade", company: "Tally Solutions Pvt Ltd" },
+        { comment: "The interactive sessions helped me grasp complex concepts easily.", name: "Pranjal Nigam", company: "Tally Solutions Pvt Ltd" },
+        { comment: "Highly recommend Labdox for career growth and skill development.", name: "Niraj Jaiswal", company: "The Guardians Real Estate Advisory" },
+        { comment: "Their courses are very well-structured and easy to follow.", name: "Rahul", company: "Flashaid" },
+        { comment: "Labdox truly transforms learning into identity building.", name: "Dhananjay Ahuja", company: "Labdox" },
+        { comment: "A fantastic platform for both students and professionals.", name: "Pratyusha Bhattacharjee", company: "Merck Group" },
+        { comment: "The best place to explore your passion and build a career that feels like yours.", name: "Akshaya Gayathri Rao", company: "" },
+        { comment: "I gained practical skills that are directly applicable to the industry.", name: "Shubhangi Katariyar", company: "" },
+        { comment: "The mentors are incredibly supportive and knowledgeable.", name: "Divya Prakash Patel", company: "" },
+        { comment: "Labdox helped me achieve my career goals beyond my expectations.", name: "Sachin Pratap Singh Sengar", company: "Northern Arc Capital" },
+        { comment: "The hands-on projects were invaluable for real-world experience.", name: "Onkar Bhadra", company: "Adamas Tech Consulting" },
+        { comment: "An amazing community of learners and innovators.", name: "Bhakti Patel", company: "" },
+        { comment: "Transformed my understanding of new technologies.", name: "Harsh Tiwari", company: "Kotak Mahindra Bank" },
+        { comment: "The flexible learning options fit perfectly with my schedule.", name: "Tushant Suresh", company: "" },
+      ];
+
+      const testimonialsCarouselContainer = document.getElementById("testimonials-carousel");
+      const testimonialsCarouselPrevBtn = document.getElementById("testimonials-carousel-prev");
+      const testimonialsCarouselNextBtn = document.getElementById("testimonials-carousel-next");
+
+      function populateTestimonialsCarousel() {
+        testimonialsCarouselContainer.innerHTML = ""; // Clear existing content
+        testimonialsData.forEach((testimonial) => {
+          const testimonialCard = `
+            <div class="carousel-item group bg-gradient-to-br from-gray-900/60 to-black/60 backdrop-blur-lg rounded-3xl p-8 border border-gray-800 hover:border-purple-500/40 transition-all duration-500 transform hover:scale-105 hover:-translate-y-4 flex flex-col items-center text-center h-full">
+                <div class="flex mb-4 justify-center">
+                    <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-current"></i>
+                    <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-current"></i>
+                    <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-current"></i>
+                    <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-current"></i>
+                    <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-current"></i>
+                </div>
+                <p class="text-gray-300 mb-6 italic flex-grow group-hover:text-white transition-colors duration-300">
+                    "${testimonial.comment}"
+                </p>
+                <div class="pt-4 border-t border-gray-800 w-full">
+                    <div class="font-semibold text-white">${testimonial.name}</div>
+                    ${testimonial.company ? `<div class="text-sm text-gray-400">${testimonial.company}</div>` : ''}
+                </div>
+            </div>
+          `;
+          testimonialsCarouselContainer.insertAdjacentHTML("beforeend", testimonialCard);
+        });
+        lucide.createIcons();
+      }
+
+      populateTestimonialsCarousel();
+
+      testimonialsCarouselNextBtn.addEventListener("click", () => {
+        const item = testimonialsCarouselContainer.querySelector('.carousel-item');
+        if (item) {
+            const itemWidth = item.offsetWidth;
+            const style = window.getComputedStyle(testimonialsCarouselContainer);
+            const gap = parseFloat(style.getPropertyValue('column-gap')) || parseFloat(style.getPropertyValue('gap')) || 0;
+            testimonialsCarouselContainer.scrollBy({
+                left: itemWidth + gap,
+                behavior: "smooth"
+            });
+        }
+      });
+
+      testimonialsCarouselPrevBtn.addEventListener("click", () => {
+        const item = testimonialsCarouselContainer.querySelector('.carousel-item');
+        if (item) {
+            const itemWidth = item.offsetWidth;
+            const style = window.getComputedStyle(testimonialsCarouselContainer);
+            const gap = parseFloat(style.getPropertyValue('column-gap')) || parseFloat(style.getPropertyValue('gap')) || 0;
+            testimonialsCarouselContainer.scrollBy({
+                left: -(itemWidth + gap),
+                behavior: "smooth"
+            });
+        }
+      });
+
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbzRmumui-qX_z1VgGn9wH22jCIoExp-QJVuSVemsvNJ6I_UTNrs0aT16TaidHCanYiwzw/exec';
+
+  document.getElementById('contact-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const formData = {
+      name: document.getElementById('full-name').value,
+      email: document.getElementById('email-address').value,
+      subject: document.getElementById('subject-select').value,
+      message: document.getElementById('message-text').value
+    };
+
+    fetch(scriptURL, {
+      method: 'POST',
+      body: JSON.stringify(formData)
+    })
+      .then(response => {
+        showCustomAlert("Message sent successfully!", "Success"); // Replaced alert
+        document.getElementById('contact-form').reset();
+      })
+      .catch(error => {
+        showCustomAlert("Error sending message. Please try again.", "Error"); // Replaced alert
+        console.error('Error!', error.message);
+      });
+  });
+
+      // Number Count-Up Animation
+      const countUpElements = document.querySelectorAll(".count-up");
+
+      const animateCountUp = (element) => {
+        const target = parseInt(element.dataset.target);
+        let current = 0;
+        const duration = 2000; // milliseconds
+        const increment = target / (duration / 10); // Calculate increment for 10ms intervals
+
+        const updateCount = () => {
+          if (current < target) {
+            current += increment;
+            if (current > target) current = target; // Ensure it doesn't overshoot
+            element.textContent = Math.floor(current);
+            requestAnimationFrame(updateCount);
+          } else {
+            element.textContent = target; // Set final value
+          }
+        };
+        updateCount();
+      };
+
+      const options = {
+        root: null, // viewport
+        rootMargin: "0px",
+        threshold: 0.5, // Trigger when 50% of the element is visible
+      };
+
+      const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animateCountUp(entry.target);
+            observer.unobserve(entry.target); // Stop observing once animated
+          }
+        });
+      }, options);
+
+      countUpElements.forEach((el) => {
+        observer.observe(el);
+      });
+    </script>
+  </body>
+</html>
