@@ -1,4 +1,4 @@
-#Labdox Website
+Labdox Website
 The official website for Labdox, a pioneering platform dedicated to revolutionizing online practical education. Labdox provides an intuitive and robust environment for educators and learners to create, manage, and engage with virtual laboratories and interactive simulations, making hands-on learning accessible to everyone, everywhere.
 
 🚀 About Labdox
@@ -86,8 +86,5 @@ yarn start
 🤝 Contributing
 We welcome contributions to the Labdox website! If you're interested in helping, please refer to our CONTRIBUTING.md for detailed guidelines on how to submit issues, propose features, and make pull requests.
 
-📄 License
-This project is licensed under the MIT License - see the LICENSE.md file for details.
-
 📞 Contact
-For any inquiries or support, please reach out to support@labdox.com.
+For any inquiries or support, please reach out to ayushshinde495@gmail.com 
