@@ -47,23 +47,8 @@ Ensure you have Node.js (v18 or higher recommended) and npm (or Yarn) installed 
 Installation
 Clone the repository:
 
-git clone https://github.com/your-username/labdox-website.git
-cd labdox-website
-
-Install dependencies:
-
-npm install
-# or
-yarn install
-
 Running the Development Server
 Start the development server:
-
-npm run dev
-# or
-yarn dev
-
-Open http://localhost:3000 in your browser to see the result.
 
 The website will automatically reload if you make changes to the source code.
 
